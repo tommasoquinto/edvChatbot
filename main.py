@@ -104,6 +104,6 @@ async def chat(chat_request: ChatRequest):
     cleaned_response = filter_response(response)
     
     print(f"Assistant response: {cleaned_response}")
-      print("prova");
+      print("prova")
 
     return {"response": cleaned_response}
