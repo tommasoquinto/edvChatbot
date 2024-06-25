@@ -11,7 +11,7 @@ import re
 
 def filter_response(response):
     # Rimuove le annotazioni tipo 〖35†source〗
-    pattern_source = r'【\\d+†source】'
+    pattern_source = r'〖\d+†source〗'
     response = re.sub(pattern_source, '', response)
     
     # Rimuove le citazioni numeriche tra parentesi quadre [1], [2], ecc.
