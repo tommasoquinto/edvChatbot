@@ -9,17 +9,6 @@ import asyncio
 import re
 
 
-def filter_response(response):
-    # Rimuove le annotazioni tipo 〖35†source〗
-    pattern_source = r'〖\d+†source〗'
-    response = re.sub(pattern_source, '', response)
-    
-    # Rimuove le citazioni numeriche tra parentesi quadre [1], [2], ecc.
-    pattern_citations = r'\[\d+\]'
-    response = re.sub(pattern_citations, '', response)
-    
-    return response
-
 # Controlliamo che la versione di OpenAI sia corretta
 required_version = version.parse("1.1.1")
 current_version = version.parse(openai.__version__)
@@ -73,7 +62,7 @@ async def chat(chat_request: ChatRequest):
     # Creiamo la run per l'assistente
     run = client.beta.threads.runs.create(thread_id=thread_id,
                                           assistant_id=assistant_id)
-    
+
     end = False
 
     # Polling per controllare lo stato della run 
@@ -97,13 +86,14 @@ async def chat(chat_request: ChatRequest):
 
     # Recuperiamo i messaggi della conversazione
     messages = client.beta.threads.messages.list(thread_id=thread_id)
-    # Recuperiamo il testo della risposta
-    response = filter_response(messages.data[0].content[0].text.value)
+    # Recuperiamo il testo della risposta e lo filtriamo direttamente
+    response = messages.data[0].content[0].text.value
     
     # Filtra la risposta per rimuovere le annotazioni e citazioni
-    cleaned_response = filter_response(response)
+    pattern_source = r'〖\\d+†source〗'
+    response = re.sub(pattern_source, '', response)
     
-    print(f"Assistant response: {cleaned_response}")
+    pattern_citations = r'\\[\\d+\\]'
+    response = re.sub(pattern_citations, '', response)
     
-
-    return {"response": "prova"}
+    return {"response": response}
