@@ -98,7 +98,7 @@ async def chat(chat_request: ChatRequest):
     # Recuperiamo i messaggi della conversazione
     messages = client.beta.threads.messages.list(thread_id=thread_id)
     # Recuperiamo il testo della risposta
-    response = messages.data[0].content[0].text.value
+    response = filter_response(messages.data[0].content[0].text.value)
     
     # Filtra la risposta per rimuovere le annotazioni e citazioni
     cleaned_response = filter_response(response)
