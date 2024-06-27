@@ -90,7 +90,7 @@ async def chat(chat_request: ChatRequest):
     response = messages.data[0].content[0].text.value
     
     # Filtra la risposta per rimuovere le annotazioni e citazioni
-    pattern_source = r'〖\\d+†source〗'
+    pattern_source = r'【\d+:\d+†[\w.-]+】'
     response = re.sub(pattern_source, '', response)
     
     pattern_citations = r'\\[\\d+\\]'
