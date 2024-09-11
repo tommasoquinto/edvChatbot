@@ -7,7 +7,7 @@ from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel
 import asyncio
 import re
-
+from fastapi.middleware.cors import CORSMiddleware
 
 # Controlliamo che la versione di OpenAI sia corretta
 required_version = version.parse("1.1.1")
@@ -21,6 +21,15 @@ else:
 
 # Inizializziamo l'app FastAPI
 app = FastAPI()
+
+# Configura il middleware CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Cambia "*" con il dominio del tuo frontend per una maggiore sicurezza
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Inizializziamo il client di OpenAI
 client = OpenAI(api_key=OPENAI_API_KEY)
